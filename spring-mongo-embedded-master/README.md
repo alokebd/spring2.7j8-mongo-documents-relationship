@@ -3,7 +3,7 @@
 - Change application.properties for DB connection attributes (db name, user and password).
 
 ## Architecture
-- One user can have multiple products and use has one address.
+- One user can have multiple products and user has one address.
 -![architecture](architecture.png)
 
 
