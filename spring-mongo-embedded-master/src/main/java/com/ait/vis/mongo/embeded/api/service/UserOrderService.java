@@ -34,17 +34,25 @@ public class UserOrderService {
 		if (name == null || name.trim().length() < 2 || name.split("\\s").length > 1) {
 			throw new IllegalArgumentException(ErrorMessages.USER_NAEME_ERROR);
 		}
-		return repository.findByFirstName(name);
+		List<User> list = repository.findByFirstName(name);
+		if (list == null || list.size() == 0) {
+			throw new ResourceNotFoundException(ErrorMessages.RESOURCE_NOT_FOUND + name);
+		}
+		return list;
 	}
 
 	public List<User> findByCity(String city) {
 		if (city == null || city.trim().length() < 2 || city.split("\\s").length > 1) {
 			throw new IllegalArgumentException(ErrorMessages.CITY_NAME_ERROR);
 		}
-		return repository.findByCity(city);
+		List<User> list = repository.findByCity(city);
+		if (list == null || list.size() == 0) {
+			throw new ResourceNotFoundException(ErrorMessages.RESOURCE_NOT_FOUND + city);
+		}
+		return list;
 	}
 
-	public void updateEmployee(User user) {
+	public void updatOrder(User user) {
 		StringBuilder rules = inputValidation(user);
 		if (rules.length() == 0) {
 			if (findById(user.getId()).isPresent()) {
@@ -72,7 +80,7 @@ public class UserOrderService {
 	private StringBuilder inputValidation(User user) {
 		StringBuilder value = new StringBuilder();
 		if (user != null) {
-			if (user.getId() <=0) {
+			if (user.getId() <= 0) {
 				value.append(ErrorMessages.USER_ID_ERROR);
 			}
 			if (user.getFirstName() == null || user.getFirstName().trim().length() < 2
@@ -80,7 +88,8 @@ public class UserOrderService {
 				value.append(ErrorMessages.USER_NAEME_ERROR);
 			}
 			Address address = user.getAddress();
-			if (address == null || address.getCity() == null || address.getCity().trim().length() < 2) {
+			if (address == null || address.getCity() == null || address.getCity().trim().length() < 2
+					|| address.getCity().split("\\s").length > 1) {
 				value.append(ErrorMessages.USER_ADDRESS_ERROR);
 			}
 			List<Product> products = user.getProducts();
