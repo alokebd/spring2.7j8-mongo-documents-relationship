@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "c313064b-bebd-43b5-b39b-f03c7e9aeb83",
+		"name": "Spring2.7-MongoDb-Documents-Relationships",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33936986"
+	},
+	"item": [
+		{
+			"name": "Place Order By User and Address",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 103,\r\n  \"firstName\": \"Alex\",\r\n  \"lastName\": \"John\",\r\n  \"gender\": \"Male\",\r\n   \"products\": [\r\n    {\r\n        \"name\": \"Computer\",\r\n        \"quantity\": 1,\r\n        \"price\": 1000\r\n    },\r\n    {\r\n        \"name\": \"Printer\",\r\n        \"quantity\": 1,\r\n        \"price\": 165\r\n    }\r\n   ],\r\n  \"address\": {\r\n    \"city\": \"Scarborough\",\r\n    \"state\": \"Ontario\",\r\n    \"pincode\": \"M1B2C1\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Orders By User First Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2024/api/orders/Joshep",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"orders",
+						"Joshep"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Orders By User City",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2024/api/orders/addresses/Toronto",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"orders",
+						"addresses",
+						"Toronto"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Order",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 101,\r\n  \"firstName\": \"Joshep\",\r\n  \"lastName\": \"He\",\r\n  \"gender\": \"Male\",\r\n   \"products\": [\r\n    {\r\n        \"name\": \"Computer\",\r\n        \"quantity\": 1,\r\n        \"price\": 1000\r\n    },\r\n    {\r\n        \"name\": \"Printer\",\r\n        \"quantity\": 1,\r\n        \"price\": 165\r\n    }\r\n   ],\r\n  \"address\": {\r\n    \"city\": \"Mississauga\",\r\n    \"state\": \"Ontario\",\r\n    \"pincode\": \"M1B2C1\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove-Order-By-User-ID",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/orders/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"orders",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
