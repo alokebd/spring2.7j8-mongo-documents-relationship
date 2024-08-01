@@ -1,6 +1,11 @@
 #Spring-MongoDB-embedded: Model One-to-One, One-to-Many Relationships Embedded Documents (collections).
-- The REST API has been built with Spring boot (2.7.1), java 8 with MongoDB for this demo.
-- Change application.properties for DB connection attributes (db name, user and password).
+- The REST API has been built with Spring boot with MongoDB for this demo.
+- Project: Maven
+- Application Framework: Spring Boot (2.7.1)
+- Language: Java (8)
+- Packaging: Jar
+- Dependencies (Spring Web, Lombok, Spring Data Mongo, Spring Devtools, Spring Test, junit, Springfox(Swagger2), Jackson and jCoCo).
+- Change application.properties for DB connection attributes (db name, user and password) when required.
 
 ## Architecture
 - One user can have multiple products and user has one address.

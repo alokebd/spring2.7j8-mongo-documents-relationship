@@ -93,7 +93,7 @@ public class UserOrderService {
 				value.append(ErrorMessages.USER_ADDRESS_ERROR);
 			}
 			List<Product> products = user.getProducts();
-			if (products == null) {
+			if (products == null || products.size()==0) {
 				value.append(ErrorMessages.PRODUCT_INPUT_ERROR);
 			} else {
 				for (Product product : products) {
@@ -104,7 +104,6 @@ public class UserOrderService {
 				}
 			}
 		}
-
 		return value;
 	}
 }

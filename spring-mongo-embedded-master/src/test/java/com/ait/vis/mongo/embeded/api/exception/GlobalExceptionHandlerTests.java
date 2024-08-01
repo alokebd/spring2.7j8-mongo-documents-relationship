@@ -20,6 +20,7 @@ import com.ait.vis.mongo.embeded.api.testutils.ApplicationTestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -58,7 +59,6 @@ public class GlobalExceptionHandlerTests {
 
 	@Test
 	public void test_2_HandleResourceExistsException() {
-
 		ResourceAlreadyExistsException ex = new ResourceAlreadyExistsException(
 				ErrorMessages.ERROR_ORDER_ALREADY_FOUND + 123);
 		// expected response
@@ -95,8 +95,6 @@ public class GlobalExceptionHandlerTests {
 		}
 	}
 
-
-
 	@Test
 	public void test_4_MethodArgumentTypeMismatchException() {
 		MethodArgumentTypeMismatchException ex = mock(MethodArgumentTypeMismatchException.class);
@@ -132,6 +130,26 @@ public class GlobalExceptionHandlerTests {
 		}
 	}
 	
+	@Test
+	public void test_6_HttpMediaTypeNotSupportedException() {
+		HttpMediaTypeNotSupportedException ex = new HttpMediaTypeNotSupportedException("Unsupported Media Type");
+		
+		// expected
+		ResponseEntity<ErrorResponse> expectedResponse = ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+				.body(new ErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), ex.getMessage()));
 
+		// Actual response
+		ResponseEntity<ErrorResponse> actualResponse = globalExceptionHandler.handleUnsupportedMediaTypeException(ex);
+
+		// assert the response
+		assertEquals(expectedResponse.getStatusCode(), actualResponse.getStatusCode());
+
+		ErrorResponse expectedResultBody = expectedResponse.getBody();
+		ErrorResponse actualResultBody = actualResponse.getBody();
+
+		if (expectedResultBody != null && actualResultBody != null) {
+			assertEquals(expectedResultBody.getMessage(), actualResultBody.getMessage());
+		}
+	}
 
 }
