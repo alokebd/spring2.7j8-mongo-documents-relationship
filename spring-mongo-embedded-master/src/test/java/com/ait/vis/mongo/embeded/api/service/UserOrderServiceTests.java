@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.ait.vis.mongo.embeded.api.exception.ResourceAlreadyExistsException;
 import com.ait.vis.mongo.embeded.api.exception.ResourceNotFoundException;
 import com.ait.vis.mongo.embeded.api.model.Product;
 import com.ait.vis.mongo.embeded.api.model.User;
@@ -162,4 +164,22 @@ public class UserOrderServiceTests {
 		assertThatThrownBy(() -> service.deletUserOrder(user.getId())).isInstanceOf(IllegalArgumentException.class);
 	}
 
+	@Test
+	public void test_13_should_throws_ResourceAlreadyExistsException_on_save() {
+		// Given
+		User user = ApplicationTestConstants.givenUserDocument();
+		when(repository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
+		// Then
+		assertThatThrownBy(() -> service.save(user)).isInstanceOf(ResourceAlreadyExistsException.class);
+	}
+	
+	@Test
+	public void test_14_should_throws_IllegalArgumentException_on_update_with_out_address() {
+		// Given
+		User user = ApplicationTestConstants.givenUserDocumentWithoutAddress();
+		// When
+		repository.save(user);
+		// Then
+		assertThatThrownBy(() -> service.updatOrder(user)).isInstanceOf(IllegalArgumentException.class);
+	}
 }

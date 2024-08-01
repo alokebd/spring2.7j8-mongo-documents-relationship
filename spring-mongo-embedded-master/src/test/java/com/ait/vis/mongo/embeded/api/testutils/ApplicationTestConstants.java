@@ -90,6 +90,25 @@ public class ApplicationTestConstants {
 		user.setAddress(a);
 		return user;
 	}
+	
+	public static User givenUserDocumentWithoutAddress() {
+		User user = new User();
+		user.setId(new Random().nextInt(100000) + 1);
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setGender(gender);
+		Product p = new Product();
+		p.setName(name);
+		p.setPrice(100);
+		p.setQuantity(100);
+		List<Product> products = new ArrayList<>();
+		products.add(p);
+		products.add(p);
+		user.setProducts(products);
+		Address a = null;
+		user.setAddress(a);
+		return user;
+	}
 
 	// For testing the Java Object
 	public static String getJsonObject(User user) {
