@@ -52,11 +52,11 @@ public class UserOrderService {
 		return list;
 	}
 
-	public void updatOrder(User user) {
+	public User updatOrder(User user) {
 		StringBuilder rules = inputValidation(user);
 		if (rules.length() == 0) {
 			if (findById(user.getId()).isPresent()) {
-				repository.save(user);
+				return repository.save(user);
 			} else {
 				throw new ResourceNotFoundException(ErrorMessages.ERROR_ORDER_NOT_FOUND + user.getId());
 			}

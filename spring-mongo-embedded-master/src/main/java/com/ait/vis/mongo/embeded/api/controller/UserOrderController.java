@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ait.vis.mongo.embeded.api.config.ApplicationAttributes;
 import com.ait.vis.mongo.embeded.api.model.User;
 import com.ait.vis.mongo.embeded.api.service.UserOrderService;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +36,7 @@ public class UserOrderController {
 	@PostMapping("/orders")
 	public ResponseEntity<Object> placeOrder(@RequestBody User user) {
 		userOrderService.save(user);
-		return new ResponseEntity<Object>("Successfully Saved", HttpStatus.OK);
+		return new ResponseEntity<Object>(ApplicationAttributes.SAVED_SUCCESS, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "GetUserOrderByUserFirstNameAPI", notes = "Get Operations - getUserbyName Event [the name path variable is required, it must be at least 3 characters and it must be one word.]", response = User.class)
@@ -67,9 +69,8 @@ public class UserOrderController {
 	@PutMapping(value = "/orders")
 	public ResponseEntity<Object> updatOrder(@RequestBody User user) {
 		userOrderService.updatOrder(user);
-		return new ResponseEntity<Object>("Update Successfully", HttpStatus.OK);
+		return new ResponseEntity<Object>(ApplicationAttributes.UPDATE_SUCCESS, HttpStatus.OK);
 	}
-
 	
 	@ApiOperation(value = "DeleteUserOrderByIdAPI", notes = "CRUD Operations -deleteUserOrder Event [id path variable must be numeric and between 1 and max integer]", response = String.class)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully Deleted Employee", response = String.class),
@@ -78,7 +79,7 @@ public class UserOrderController {
 	@DeleteMapping(value = "/orders/{id}")
 	public ResponseEntity<Object> deleteUserOrder(@PathVariable int id) {
 		userOrderService.deletUserOrder(id);
-		return new ResponseEntity<Object>("Deleted Successfully", HttpStatus.OK);
+		return new ResponseEntity<Object>(ApplicationAttributes.DELETE_SUCCESS, HttpStatus.OK);
 	}
 
 }

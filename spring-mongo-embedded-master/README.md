@@ -29,3 +29,6 @@
 
 ## Import postman collections to test APIs
 -![postman](postman.PNG)
+
+## Test Coverage By jCoCO 
+-![jcoco-test-coverage](jcoco-test-coverage.PNG)

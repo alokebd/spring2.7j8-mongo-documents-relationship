@@ -1,18 +1,13 @@
 package com.ait.vis.mongo.embeded.api.exception;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -27,20 +22,26 @@ public class GlobalExceptionHandler {
 	
 	//Custom exception handler for ResourceAlreadyExistsException
     @ExceptionHandler(value=ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleSupplierAlreadyExistsException(ResourceAlreadyExistsException ex){
+    public ResponseEntity<ErrorResponse> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex){
         log.error(HttpStatus.CONFLICT + ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(),
                 ex.getMessage()));
     }
-
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		List<String> errorMessages = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage)
-				.collect(Collectors.toList());
+    
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
 		log.error(HttpStatus.BAD_REQUEST + ex.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessages.toString()));
+				.body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
 	}
+
+	//When given wrong request param
+    @ExceptionHandler(value= MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex){
+        log.error(HttpStatus.METHOD_NOT_ALLOWED + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED.value(),
+                ex.getMessage()));
+    }
 
 	// When given invalid request method
 	@ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
@@ -51,20 +52,15 @@ public class GlobalExceptionHandler {
 				.body(new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED.value(), ex.getMessage()));
 	}
 
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-		log.error(HttpStatus.BAD_REQUEST + ex.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
-	}
-
 	// When given invalid values to request body
+	//Deprecated Exception
+	/*
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
 		log.error(HttpStatus.BAD_REQUEST + ex.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
-	}
+	}*/
 
 	// Invalid media types
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
