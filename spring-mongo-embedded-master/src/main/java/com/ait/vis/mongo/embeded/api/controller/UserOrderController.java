@@ -29,14 +29,14 @@ public class UserOrderController {
 	private UserOrderService userOrderService;
 	
 	@ApiOperation(value = "SavedUserOrderAPI", notes = "CRUD Operations - placeOrder Event [The user request body is required", response = String.class)
-	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully Saved User", response = String.class),
+	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully Saved User", response = String.class),
 			@ApiResponse(code = 400, message = "Invalid Request", response = String.class),
 			@ApiResponse(code = 409, message = "Resource Exists", response = String.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = String.class) })
 	@PostMapping("/orders")
 	public ResponseEntity<Object> placeOrder(@RequestBody User user) {
 		userOrderService.save(user);
-		return new ResponseEntity<Object>(ApplicationAttributes.SAVED_SUCCESS, HttpStatus.OK);
+		return new ResponseEntity<Object>(ApplicationAttributes.SAVED_SUCCESS, HttpStatus.CREATED);
 	}
 	
 	@ApiOperation(value = "GetUserOrderByUserFirstNameAPI", notes = "Get Operations - getUserbyName Event [the name path variable is required, it must be at least 3 characters and it must be one word.]", response = User.class)
@@ -62,7 +62,7 @@ public class UserOrderController {
 	}
 	
 	@ApiOperation(value = "UpdatOrderByUserAPI", notes = "CRUD Operations -updateOrder Event [The user request body is required]", response = String.class)
-	@ApiResponses({ @ApiResponse(code = 201, message = "Successfully Fetched All Employees", response = String.class),
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successfully Fetched All Employees", response = String.class),
 			@ApiResponse(code = 400, message = "Invalid Request", response = String.class),
 			@ApiResponse(code = 404, message = "Resource Not Found", response = String.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = String.class) })

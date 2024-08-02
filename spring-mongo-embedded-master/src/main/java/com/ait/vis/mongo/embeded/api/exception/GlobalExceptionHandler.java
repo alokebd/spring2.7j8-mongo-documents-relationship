@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
 	// 7. Common exception
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleCommonException(Exception ex) {
-		log.error(ex.getMessage(), ex);
+		log.error("GlobalExceptionHandler.handleCommonException() - "+ex.getMessage(), ex);
 		if (ex instanceof NullPointerException) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

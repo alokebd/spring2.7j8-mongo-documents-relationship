@@ -154,7 +154,7 @@ public class UserOrderServiceTests {
 	}
 
 	@Test
-	public void test_12_should_throw_IllegalArgumentException_when_delete() {
+	public void test_12_should_throw_IllegalArgumentException_when_Id_zero_for_delete() {
 		// Given
 		User user = ApplicationTestConstants.givenUserDocument();
 		user.setId(0);
@@ -172,7 +172,7 @@ public class UserOrderServiceTests {
 		// Then
 		assertThatThrownBy(() -> service.save(user)).isInstanceOf(ResourceAlreadyExistsException.class);
 	}
-	
+
 	@Test
 	public void test_14_should_throws_IllegalArgumentException_on_update_with_out_address() {
 		// Given
@@ -181,5 +181,41 @@ public class UserOrderServiceTests {
 		repository.save(user);
 		// Then
 		assertThatThrownBy(() -> service.updatOrder(user)).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	public void test_15_should_throws_ResourceNotFoundException_on_find_by_city() {
+		// Given
+		User user = ApplicationTestConstants.givenUserDocument();
+		// When
+		when(repository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
+		service.deletUserOrder(user.getId());
+		// Then
+		assertThatThrownBy(() -> service.findByCity(user.getAddress().getCity()))
+				.isInstanceOf(ResourceNotFoundException.class);
+
+	}
+
+	@Test
+	public void test_16_should_throws_ResourceNotFoundException_on_find_by_name() {
+		// Given
+		User user = ApplicationTestConstants.givenUserDocument();
+		// When
+		when(repository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
+		service.deletUserOrder(user.getId());
+		// Then
+		assertThatThrownBy(() -> service.findByName(user.getFirstName())).isInstanceOf(ResourceNotFoundException.class);
+
+	}
+	
+	@Test
+	public void test_17_should_throw_IllegalArgumentException_when_Id_negative_integer_for_delete() {
+		// Given
+		User user = ApplicationTestConstants.givenUserDocument();
+		user.setId(-200);
+		// When
+		repository.delete(user);
+		// Then
+		assertThatThrownBy(() -> service.deletUserOrder(user.getId())).isInstanceOf(IllegalArgumentException.class);
 	}
 }

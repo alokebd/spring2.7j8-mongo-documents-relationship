@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 import com.ait.vis.mongo.embeded.api.SpringMongoEmbededApplication;
 import com.ait.vis.mongo.embeded.api.config.ApplicationAttributes;
+import com.ait.vis.mongo.embeded.api.exception.ErrorMessages;
 import com.ait.vis.mongo.embeded.api.model.User;
 import com.ait.vis.mongo.embeded.api.testutils.ApplicationTestConstants;
 import com.ait.vis.mongo.embeded.api.testutils.HttpHelper;
@@ -34,7 +35,7 @@ public class UserOrderControllerTests {
 	private int port;
 
 	@Test
-	public void test_1_should_place_order() {
+	public void test_1_should_return_201_place_order() {
 		// Given
 		String url = String.format(ApplicationTestConstants.URL, port);
 		User user = ApplicationTestConstants.givenUserDocument();
@@ -42,13 +43,13 @@ public class UserOrderControllerTests {
 		// When
 		ResponseEntity<String> response = testRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
 		// Then
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 		assertNotNull(response.getBody());
 		assertEquals(response.getBody().toString(), ApplicationAttributes.SAVED_SUCCESS);
 	}
 
 	@Test
-	public void test_2_should_get_users_by_name() {
+	public void test_2_should_return_200_get_users_by_name() {
 		// Given
 		User user = ApplicationTestConstants.givenUserDocument();
 		String url = String.format(ApplicationTestConstants.URL.concat("/").concat(user.getFirstName()), port);
@@ -65,7 +66,7 @@ public class UserOrderControllerTests {
 	}
 
 	@Test
-	public void test_3_should_get_users_by_city() {
+	public void test_3_should_return_200_get_users_by_city() {
 		// Given
 		User user = ApplicationTestConstants.givenUserDocument();
 		String url = String
@@ -83,7 +84,7 @@ public class UserOrderControllerTests {
 	}
 
 	@Test
-	public void test_4_should_update_order_by_supplied_user() {
+	public void test_4_should_return_200_update_order_by_supplied_user() {
 		// Given
 		User user = ApplicationTestConstants.givenUserDocument();
 		int id = user.getId();
@@ -103,7 +104,7 @@ public class UserOrderControllerTests {
 	}
 	
 	@Test
-	public void test_5_should_remove_order_by_id() {
+	public void test_5_should_return_200_for_remove_order_by_id() {
 		// Given
 		User user = ApplicationTestConstants.givenUserDocument();
 		int id = user.getId();
@@ -118,6 +119,24 @@ public class UserOrderControllerTests {
 		assertEquals(delet_response.getStatusCode(), HttpStatus.OK);
 		assertNotNull(delet_response.getBody());
 		assertEquals(delet_response.getBody().toString(), ApplicationAttributes.DELETE_SUCCESS);
+	}
+	
+	@Test
+	public void test_6_should_return_400_remove_order_by_negative_id() {
+		// Given
+		User user = ApplicationTestConstants.givenUserDocument();
+		user.setId(-200);
+		int id = user.getId();
+		HttpEntity<User> request = HttpHelper.getHttpEntity(user);
+		String url = String.format(ApplicationTestConstants.URL, port);
+		testRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+		String update_url = String.format(ApplicationTestConstants.URL.concat("/").concat(String.valueOf(id)), port);
+		// When
+		ResponseEntity<String> delet_response = testRestTemplate.exchange(update_url, HttpMethod.DELETE, request,
+				String.class);
+		// Then
+		assertEquals(delet_response.getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertNotNull(delet_response.getBody().toString().indexOf(ErrorMessages.ERROR_ORDER_BAD_REQUESTD + id), ErrorMessages.ERROR_ORDER_BAD_REQUESTD + id);
 	}
 
 }
